@@ -11,8 +11,8 @@ com/identific/service/UserServiceImpl.class
 com/identific/controller/LoginController.class
 com/identific/controller/LocalidadeController.class
 com/identific/model/Veiculo.class
-com/identific/repository/RoleRepository.class
 com/identific/IdvApplication.class
+com/identific/repository/RoleRepository.class
 com/identific/config/WebMvcConfig.class
 com/identific/config/ThymeleafConfig.class
 com/identific/model/Cr.class

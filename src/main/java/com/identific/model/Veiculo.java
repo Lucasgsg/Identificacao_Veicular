@@ -15,7 +15,7 @@ public class Veiculo {
 
     private String modelo = "";
 
-    private String cor= "";
+    private String cor = "";
     
     private String placa="";
 
@@ -23,15 +23,7 @@ public class Veiculo {
     
     private String placa_cid = "";
     
-    private String localidade;
-
-    public String getLocalidade() {
-        return localidade;
-    }
-
-    public void setLocalidade(String localidade) {
-        this.localidade = localidade;
-    }
+    private Long cnh;
 
     @ManyToOne
     private Condutor condutor;
@@ -50,6 +42,14 @@ public class Veiculo {
 
     public void setId(Long id) {
         this.id = id;
+    }
+    
+    public Long getCnh() {
+        return cnh;
+    }
+
+    public void setCnh(Long cnh) {
+        this.cnh = cnh;
     }
 
     public String getTipo_veiculo() {
@@ -106,5 +106,17 @@ public class Veiculo {
 
     public void setPlaca_cid(String placa_cid) {
         this.placa_cid = placa_cid;
+    }
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "localidade_id", referencedColumnName = "id")
+    private Localidade localidade;
+
+    public Localidade getLocalidade() {
+        return localidade;
+    }
+
+    public void setLocalidade(Localidade localidade) {
+        this.localidade = localidade;
     }
 }

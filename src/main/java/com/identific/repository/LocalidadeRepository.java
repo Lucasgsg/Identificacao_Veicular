@@ -7,5 +7,5 @@ import org.springframework.data.repository.CrudRepository;
 import com.identific.model.Localidade;
 
 public interface LocalidadeRepository extends CrudRepository<Localidade, Long>{
-	Localidade findByIdLike(Long id);
+	List<Localidade> findByIdLike(Long id);
 }

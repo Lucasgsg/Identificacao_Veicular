@@ -55,4 +55,7 @@ public class Localidade {
 	public void setBairro(String bairro) {
 		this.bairro = bairro;
 	}
+	
+	
+
 }

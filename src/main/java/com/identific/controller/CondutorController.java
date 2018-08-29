@@ -54,10 +54,9 @@ public class CondutorController {
     }
 
     @GetMapping("/editar")
-    public String edit(Model model, @RequestParam Long cnh) {
-        model.addAttribute("condutor", condutorRepository.findOne(cnh));
+    public String edit(Model model, @RequestParam Long id) {
+        model.addAttribute("condutor", condutorRepository.findOne(id));
         model.addAttribute("veiculos", veiculoRepository.findAll());
-        model.addAttribute("crs", crRepository.findAll());
         return "condutor/formulario";
     }
 
@@ -76,18 +75,17 @@ public class CondutorController {
 		}
         condutorRepository.save(condutor);
         return "redirect:";
-        
     }
     
     @GetMapping("/excluir")
-    public String excluir(Model model, @RequestParam Long cnh) {
-        condutorRepository.delete(cnh);
+    public String excluir(Model model, @RequestParam Long id) {
+        condutorRepository.delete(id);
         return "redirect:";
     }
         
-    @RequestMapping(value = "/{cnh}", method = RequestMethod.GET)
-    public ModelAndView listaVeiculos(@PathVariable("cnh") long cnh) {
-        Condutor condutor = condutorRepository.findByCnh(cnh);
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    public ModelAndView listaVeiculos(@PathVariable("id") long id) {
+        Condutor condutor = condutorRepository.findById(id);
         ModelAndView mv = new ModelAndView("veiculo/ListaVeiculos");
         mv.addObject("condutor", condutor);
 
@@ -96,15 +94,15 @@ public class CondutorController {
         return mv;
     }
 
-    @RequestMapping(value = "/{cnh}", method = RequestMethod.POST)
-    public String listaVeiculosPost(@PathVariable("cnh") long cnh, @Valid Condutor condutor,@Valid Veiculo veiculo, BindingResult result, RedirectAttributes attributes) {
+    @RequestMapping(value = "/{id}", method = RequestMethod.POST)
+    public String listaVeiculosPost(@PathVariable("id") long id, @Valid Condutor condutor,@Valid Veiculo veiculo, @Valid Localidade localidade, BindingResult result, RedirectAttributes attributes) {
         if (result.hasErrors()) {
-            return "redirect:{cnh}";
+            return "redirect:{id}";
         }
-        Condutor condutors = condutorRepository.findByCnh(cnh);
+        Condutor condutors = condutorRepository.findById(id);
         veiculo.setCondutor(condutors);
         veiculoRepository.save(veiculo);
-        return "redirect:{cnh}";
+        return "redirect:{id}";
     }
     
     @RequestMapping("/deletarVeiculo")

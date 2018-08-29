@@ -11,6 +11,9 @@ public class Condutor implements Serializable {
 
     // Chave Primaria
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    
     private Long cnh;
 
     private String venc_cnh = "";
@@ -20,6 +23,8 @@ public class Condutor implements Serializable {
     private String tipo_user = "";
 
     private String nome = "";
+
+    private String local_trab = "";
 
     private Long matricula;
 
@@ -31,6 +36,14 @@ public class Condutor implements Serializable {
 
     @OneToMany
     private List<Veiculo> veiculos;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public Long getCnh() {
         return cnh;
@@ -70,6 +83,14 @@ public class Condutor implements Serializable {
 
     public void setNome(String nome) {
         this.nome = nome;
+    }
+
+    public String getLocal_trab() {
+        return local_trab;
+    }
+
+    public void setLocal_trab(String local_trab) {
+        this.local_trab = local_trab;
     }
 
     public Long getMatricula() {

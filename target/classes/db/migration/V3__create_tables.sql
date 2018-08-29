@@ -1,7 +1,7 @@
 CREATE TABLE cr (
-	id	BIGINT auto_increment NOT NULL,
+	id	BIGINT,
 	nome	VARCHAR (250),
-	descricao	VARCHAR (250),
+	descricao   VARCHAR (250),
 	PRIMARY KEY (id)
 );
 
@@ -15,31 +15,33 @@ CREATE TABLE localidade (
 );
 
 CREATE TABLE condutor (
-    cnh	BIGINT	NOT NULL UNIQUE,
+    id          BIGINT not null AUTO_INCREMENT,
+    cnh         BIGINT UNIQUE,
     venc_cnh	VARCHAR (250),
     categ_cnh	VARCHAR (250),
     tipo_user	VARCHAR (250),
     nome	VARCHAR (250),
     matricula	BIGINT,
     email	VARCHAR (250),
-    tel	VARCHAR (250),
+    tel         VARCHAR (250),
     ramal	VARCHAR (250),
     cr_id	BIGINT,
-    PRIMARY KEY (cnh),
+    PRIMARY KEY (id),
     FOREIGN KEY (cr_id) REFERENCES cr(id)
-    ON DELETE CASCADE
 );
 
 CREATE TABLE veiculo (
 	id	BIGINT auto_increment NOT NULL,
 	tipo_veiculo	VARCHAR (250),
 	marca	VARCHAR (250),
-	modelo  VARCHAR (250),
-	cor     VARCHAR (250),
-	placa	VARCHAR (250),
-	placa_cid   VARCHAR (250),
-        localidade VARCHAR(250),
-	PRIMARY KEY (id)
+	modelo	VARCHAR (250),
+	cor	VARCHAR (250),
+	placa	VARCHAR (250) UNIQUE,
+        placa_uf    VARCHAR(250),
+	placa_cid	VARCHAR (250),
+	localidade_id	BIGINT,
+	PRIMARY KEY (id),
+	FOREIGN KEY (localidade_id) REFERENCES localidade(id)
 );
 
 INSERT INTO cr VALUES

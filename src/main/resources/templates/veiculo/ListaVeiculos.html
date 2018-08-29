@@ -27,117 +27,90 @@
 
         <!-- Font Awesome JS -->
         <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js" integrity="sha384-tzzSw1/Vo+0N5UhStP3bvwWPq+uvzCMfrN1fEFe+xBmv1C/AtVX5K0uZtmcHitFZ" crossorigin="anonymous"></script>
-        <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js" integrity="sha384-6OIrr52G08NpOFSZdxxz1xdNSndlD4vdcf/q2myIUVO0VsqaGHJsB0RaBE01VTOY" crossorigin="anonymous"></script>
         
+        <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js" integrity="sha384-6OIrr52G08NpOFSZdxxz1xdNSndlD4vdcf/q2myIUVO0VsqaGHJsB0RaBE01VTOY" crossorigin="anonymous"></script>
         <script type="text/javascript">
-            function montaCidade(estado, pais){
-            $.ajax({
-            type:'GET',
-            url:'http://api.londrinaweb.com.br/PUC/Cidades/'+estado+'/'+pais+'/0/10000',
-            contentType: "application/json; charset=utf-8",
-            dataType: "jsonp",
-            async:false
-            }).done(function(response){
-            cidades='';
+            function montaCidade(estado){
+                $.ajax({
+                    type:'GET',
+                    url:'http://api.londrinaweb.com.br/PUC/Cidades/'+estado+'/BR/0/10000',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "jsonp",
+                        async:false
+                }).done(function(response){
+                    cidades='';
 
-            $.each(response, function(c, cidade){
-
-            cidades+='<option value="'+cidade+'">'+cidade+'</option>';
-
-            });
-
-            // PREENCHE AS CIDADES DE ACORDO COM O ESTADO
-            $('#cidade').html(cidades);
-
-            });
-            }
-
-            function montaUF(pais){
-            $.ajax({
-            type:'GET',
-            url:'http://api.londrinaweb.com.br/PUC/Estados/'+pais+'/0/10000',
-            contentType: "application/json; charset=utf-8",
-            dataType: "jsonp",
-            async:false
-            }).done(function(response){
-            estados='';
-            $.each(response, function(e, estado){
-
-            estados+='<option value="'+estado.UF+'">'+estado.Estado+'</option>';
-
-            });
-
-            // PREENCHE OS ESTADOS BRASILEIROS
-            $('#estado').html(estados);
-
-            // CHAMA A FUNÇÃO QUE PREENCHE AS CIDADES DE ACORDO COM O ESTADO
-            montaCidade($('#estado').val(), pais);
-
-            // VERIFICA A MUDANÇA NO VALOR DO CAMPO ESTADO E ATUALIZA AS CIDADES
-            $('#estado').change(function(){
-            montaCidade($(this).val(), pais);
-            });
-
-            });
-            }
-
-            function montaPais(){
-            $.ajax({
-                type:	'GET',
-                url:	'http://api.londrinaweb.com.br/PUC/Paisesv2/0/1000',
-                contentType: "application/json; charset=utf-8",
-                dataType: "jsonp",
-                async:false
-            }).done(function(response){
-
-            paises='';
-
-            $.each(response, function(p, pais){
-
-            if(pais.Pais == 'Brasil'){
-                paises+='<option value="'+pais.Sigla+'" selected>'+pais.Pais+'</option>';
-            } else {
-                paises+='<option value="'+pais.Sigla+'">'+pais.Pais+'</option>';
-            }
-
-            });
-
-            // PREENCHE O SELECT DE PAÍSES
-            $('#pais').html(paises);
-
-            // PREENCHE O SELECT DE ACORDO COM O VALOR DO PAÍS
-            montaUF($('#pais').val());
-
-            // VERIFICA A MUDANÇA DO VALOR DO SELECT DE PAÍS
-            $('#pais').change(function(){
-                if($('#pais').val() == 'BR'){
-                    // SE O VALOR FOR BR E CONFIRMA OS SELECTS
-                    $('#estado').remove();
-                    $('#cidade').remove();
-                    $('#campo_estado').append('<select id="estado" class="form-control"></select>');
-                    $('#campo_cidade').append('<select id="cidade" class="form-control"></select>');
-
-            // CHAMA A FUNÇÃO QUE MONTA OS ESTADOS
-            montaUF('BR');		
-            } else {
-                // SE NÃO FOR, TROCA OS SELECTS POR INPUTS DE TEXTO
-                $('#estado').remove();
-                $('#cidade').remove();
-                $('#campo_estado').append('<input type="text" id="estado" class="form-control">');
-                $('#campo_cidade').append('<input type="text" id="cidade" class="form-control">');
-            }
-            })
-
-            });
-            }
-
-            $(document).ready(function () {
-                montaPais();
-                    $('#sidebarCollapse').on('click', function () {
-                        $('#sidebar').toggleClass('active');
+                $.each(response, function(c, cidade){
+                    cidades+='<option value="'+cidade+'">'+cidade+'</option>';
                 });
-            });
 
+                // PREENCHE AS CIDADES DE ACORDO COM O ESTADO
+                $('#cidadePlaca').html(cidades);
+
+                });
+            }
+
+            function montaUF(){
+                $.ajax({
+                    type:'GET',
+                    url:'http://api.londrinaweb.com.br/PUC/Estados/BR/0/10000',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "jsonp",
+                        async:false
+                        }).done(function(response){
+                        estados='';
+
+                $.each(response, function(e, estado){
+                    estados+='<option value="'+estado.UF+'">'+estado.Estado+'</option>';
+                });
+
+                // PREENCHE OS ESTADOS BRASILEIROS
+                $('#estadoPlaca').html(estados);
+
+                // CHAMA A FUNÇÃO QUE PREENCHE AS CIDADES DE ACORDO COM O ESTADO
+                montaCidade($('#estadoPlaca').val());
+
+                // VERIFICA A MUDANÇA NO VALOR DO CAMPO ESTADO E ATUALIZA AS CIDADES
+                $('#estadoPlaca').change(function(){
+                    montaCidade($(this).val());
+                });
+
+                });
+            }
+
+            montaUF();
+        </script>
+        
+        <!-- Script de Seleção Especial para cada Categoria de CNH -->
+        <script type="text/javascript">
+            function validarForm(valor) {
+                if(valor == "A" ){ 
+                    document.getElementById("opt1").setAttribute('style','visibility:hidden');
+                    document.getElementById("opt2").setAttribute('style','visibility:visible');
+                    document.getElementById("opt3").setAttribute('style','visibility:hidden');
+                    document.getElementById("opt4").setAttribute('style','visibility:hidden');
+                }
+                else if (valor == "B" ){
+                    document.getElementById("opt1").setAttribute('style','visibility:visible');
+                    document.getElementById("opt2").setAttribute('style','visibility:hidden');
+                    document.getElementById("opt3").setAttribute('style','visibility:visible');
+                    document.getElementById("opt4").setAttribute('style','visibility:hidden');
+                    
+                }
+                else if (valor == "C" || valor == "D"){
+                    document.getElementById("opt1").setAttribute('style','visibility:hidden');
+                    document.getElementById("opt2").setAttribute('style','visibility:hidden');
+                    document.getElementById("opt3").setAttribute('style','visibility:hidden');
+                    document.getElementById("opt4").setAttribute('style','visibility:visible');
+                    
+                }
+                else{
+                    document.getElementById("opt1").setAttribute('style','visibility:hidden');
+                    document.getElementById("opt2").setAttribute('style','visibility:hidden');
+                    document.getElementById("opt3").setAttribute('style','visibility:hidden');
+                    document.getElementById("opt4").setAttribute('style','visibility:hidden');
+                }
+            }
         </script>
     </head>
     <body>
@@ -196,89 +169,88 @@
                     </div>
                 </nav>
 
-
                 <div th:each="condutor : ${condutor}" class="container-lg detalhesCondutor">
                     <h5>Detalhes do Condutor</h5>
                     <h6>Tipo Usuario: <span th:text="${condutor.tipo_user}"></span></h6>
                     <h6>Nome: <span th:text="${condutor.nome}"></span></h6>
-                    <h6>Cnh: <span th:text="${condutor.cnh}"></span></h6>
                     <h6>Contato: <span th:text="${condutor.tel}"></span></h6>
-                    <h6>Ramal:<span th:text="${condutor.ramal}"></td>></span> </h6>
-                    <h6>CR: <span th:text="${condutor.cr.nome}"></span></h6>
                 </div>
 
-                <div class="container-fluid-lg">
-                    <form class="form" role="form" th:object="${veiculos}" method="post">
-
-                        <label class="col-lg-3 col-form-label dados-label">
-                            Tipo Veículo:
-                            <select id="Tipo_veiculo" name="Tipo_veiculo" class="form-control" title="Tipo do Veiculo" required="required">      
+                <div class="container-fluid-lg" id="simCnh">
+                    <form method="post" th:object="${veiculo}">
+                        
+                        <!-- Categoria CNH -->
+                        <label class="col-lg-2 col-form-label dados-label">
+                            Categoria Cnh: <select class="form-control" id="inputCateg"  onchange="validarForm(this.value)" required="required"> 
                                 <option value="" selected="selected">Selecione...</option>
-                                <option value="Carro" name="Carro">Carro</option>
-                                <option value="Moto" name="Moto">Moto</option>
-                                <option value="Caminhao" name="Caminhao">Caminhao</option>
+                                <option value="A" >A</option>
+                                <option value="B">B</option>
+                                <option value="C">C</option>
+                                <option value="D">D</option>
                             </select>
                         </label>
-
+                        
+                        <!-- Tipo de Veículo -->
                         <label class="col-lg-3 col-form-label dados-label">
-                            Modelo: <input type="text" value="" name="modelo" title="Modelo do Veículo" class="form-control" required="required"/>
-                        </label>
-
-                        <label class="col-lg-3 col-form-label dados-label">
-                            Marca: <input type="text" value="" name="marca" title="Marca do Veículo" class="form-control"/>
-                        </label>
-
-                        <label class="col-lg-3 col-form-label dados-label">
-                            Cor: <input type="text" value="" name="cor" title="Cor do Veículo" class="form-control" required="required"/>
-                        </label>
-
-                        <label class="col-lg-3 col-form-label dados-label">
-                            Placa: <input type="text" value="" name="placa" maxlength="7" title="Placa do Veículo" class="form-control" required="required"/>
-                        </label>
-
-                        <label class="col-lg-3 col-form-label dados-label">
-                            País: <select id="pais" value="" name="pais" class="form-control" title="País Origem do Veículo"></select>
-                        </label>
-
-                        <label id="campo_estado" class="col-lg-3 col-form-label dados-label">
-                            Estado Placa: <select id="estado" name="estado_cid" class="form-control" title="Estado da Placa do Veículo">      
-                            </select>
-                        </label>
-
-                        <label id="campo_cidade" class="col-lg-3 col-form-label dados-label">
-                            Cidade Placa: <select id="cidade" name="placa_cid" class="form-control" title="Cidade da Placa do Veículo">      
-                            </select>
-                        </label>
-
-                        <!--------------------NAO ESTA FUNCIONANDO ---------------->
-
-                        <label class="col-lg-3 col-form-label dados-label">
-                            Estacionamento:
-                            <select id="Localidade" name="Localidade" class="form-control" title="Estacionamento Utilizado" required="required">
+                            Tipo Veículo: <select name="*{veiculo.tipo_veiculo}" class="form-control" required="required">      
                                 <option value="" selected="selected">Selecione...</option>
-                                <option value="ULA-CENTRO ADMINISTRATIVO" name="ULA-CENTRO ADMINISTRATIVO">ULA-CENTRO ADMINISTRATIVO</option>
-                                <option value="ULA-CD LOGISTICO" name="ULA-CD LOGISTICO">ULA-CD LOGISTICO</option>
-                                <option value="ULA-CRV" name="ULA-CRV">ULA-CRV</option>
-                                <option value="ULA-PARQUE DE ANTENAS" name="ULA-PARQUE DE ANTENAS">ULA-PARQUE DE ANTENAS</option>
-                                <option value="ULA-CDI" name="ULA-CDI">ULA-CDI</option>
-                                <option value="URA-ARQUELAU" name="URA-ARQUELAU">URA-ARQUELAU</option>
-                                <option value="FAC-OPERAÇÃO" name="FAC-OPERAÇÃO">FAC-OPERAÇÃO</option>
-                                <option value="FAC-CENTRO" name="FAC-CENTRO">FAC-CENTRO</option>
-                                <option value="SQB-CENTRO" name="SQB-CENTRO">SQB-CENTRO</option>
-                                <option value="SPO-QUATA" name="SPO-QUATA">SPO-QUATA</option>
-                                <option value="IUB-CENTRO (01)"name="IUB-CENTRO (01)">IUB-CENTRO (01)</option>
-                                <option value="IUA-CENTRO (01)" name="IUA-CENTRO (01)">IUA-CENTRO (01)</option>
+                                <option value="Carro" id="opt1" name="Carro"  style="display:none">Carro</option>
+                                <option value="Moto" id="opt2" name="Moto"  style="display:none">Moto</option>
+                                <option value="Van" id="opt3" name="Van"  style="display:none">Van</option>
+                                <option value="Caminhao" id="opt4" name="Caminhao"  style="display:none">Caminhao</option>
                             </select>
                         </label>
-
-                        <!-- ------------------------------------------------------------ -->
-
+                        
+                         <!-- Modelo -->
+                        <label class="col-lg-3 col-form-label dados-label" id="modelo">
+                            Modelo: <input type="text" value="" name="modelo" class="form-control"/>
+                        </label>
+                        
+                         <!-- Marca -->
+                        <label class="col-lg-3 col-form-label dados-label" id="marca">
+                            Marca: <input type="text" value="" name="marca" class="form-control"/>
+                        </label>
+                        
+                         <!-- Cor -->
+                        <label class="col-lg-3 col-form-label dados-label" id="cor">
+                            Cor: <input type="text" value="" name="cor" class="form-control"/>
+                        </label>
+                        
+                         <!-- Placa -->
+                        <label class="col-lg-3 col-form-label dados-label" id="placa">
+                            Placa: <input type="text" value="" name="placa" maxlength="7" title="Placa do Veículo" class="form-control"/>
+                        </label>
+                        
+                         <!-- Estado Placa -->
+                        <label class="col-lg-3 col-form-label dados-label" id="estadoPlaca2">
+                            Estado Placa: <select value="" name="estado_cid" class="form-control">      
+                            </select>
+                        </label>
+                        
+                         <!-- Cidade Placa -->
+                        <label class="col-lg-3 col-form-label dados-label" id="cidadePlaca">
+                            Cidade Placa:<select value="" name="placa_cid" class="form-control">      
+                            </select>
+                        </label>
+                        
+                         <!-- Estacionamento -->
+                            <label class="col-lg-4 col-form-label dados-label" id="estacionamento">
+                                Estacionamento: <select name="*{veiculo.localidade}" id="inputLocaldade" class="form-control">
+                                    <option value="" selected="selected">Selecione...</option>
+                                    <option th:each="localidade : ${localidades}" th:value="${localidade.id}"
+                                            th:utext="${localidade.estacao}"></option>
+                                </select>
+                            </label>
+                        
+                         <!-- Salvar -->
                         <button type="submit" class="btn btn-outline-success" >
                             <i class="fas fa-plus-square"></i>
                             Salvar
                         </button> 
+
                     </form>
                 </div>
+
 
                 <div id="container-fluid">
                     <table class="table table-striped table-hover table-light">
@@ -305,8 +277,7 @@
                                 <td th:text="${veiculo.estado_cid}"></td>
                                 <td th:text="${veiculo.placa_cid}"></td>
                                 <td th:text="${veiculo.localidade}"></td>
-                                <td>
-                                    <a th:href="${(#mvc.url('CC#deletarVeiculo').arg(0, veiculo.id)).build()}">
+                                <td><a th:href="${(#mvc.url('CC#deletarVeiculo').arg(0, veiculo.id)).build()}">
                                         <i class="fas fa-trash"></i>
                                         Excluir
                                     </a>
@@ -317,5 +288,20 @@
                 </div>   
             </div>
         </div>
+        <!-- jQuery CDN - Slim version (=without AJAX) -->
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <!-- Popper.JS -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
+        <!-- Bootstrap JS -->
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
+        <script type="text/javascript">
+            $(document).ready(function () {
+            $('#sidebarCollapse').on('click', function () {
+            $('#sidebar').toggleClass('active');
+            });
+            });
+        </script>
     </body>
+
+
 </html>

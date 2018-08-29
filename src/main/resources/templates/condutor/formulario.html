@@ -3,12 +3,10 @@
     <head>
         <meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
         <meta name="viewport" content="width=device-width,initial-scale=1"/>
-
         <title>Cadastro Condutor</title>
 
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
-
-        <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
+        <link rel="stylesheet" type="text/css" th:href="@{/css/style4.css}"/>
 
         <!-- Css para funcionar o Bootstrap v4.0 -->
         <link rel="stylesheet" th:href="@{/css/bootstrap/bootstrap.min.css}"/>
@@ -24,11 +22,94 @@
         <!-- Scripts para bootstrap-select -->
         <script th:src="@{/js/bootstrap/bootstrap-select.min.js}"></script>
 
+        <!-- Scripts para Máscara e se possui CNH -->
         <script th:src="@{/js/jquery.mask.min.js}"></script>
         <script>
             $(document).ready(function(){
                 $("#telefone").mask("(00)0 0000-0000");
+                
+            $('input:radio[name="optionsRadiosInline"]').change(
+            function() {
+                if ($(this).is(':checked') &&  $(this).val() == 'Option1'){
+                        $("#numCnh, #numVenc").show();
+                        $("#inputCnh,#inputVencimento").attr('required', '');
+                    }
+                else{
+                        $("#numCnh, #numVenc").hide();
+                        $("#inputCnh,#inputVencimento").removeattr('required');
+                        
+                    }
+                });
+                
             });
+        </script>
+        
+        <!-- Script de Seleção Especial para cada de Tipo de Usuário -->
+        <script type="text/javascript">
+            function validarForm(valor) { 
+                        if(valor == "Associado" ){ 
+                            document.getElementById("numMat").setAttribute('style','visibility:visible');
+                            document.getElementById("inputMatricula").required = true;
+                            document.getElementById("ramal").setAttribute('style','visibility:visible');
+                            document.getElementById("email").setAttribute('style','visibility:visible');
+                            document.getElementById("inputEmail").required = true;
+                            document.getElementById("numTel").setAttribute('style','visibility:visible');
+                            document.getElementById("telefone").required = true;
+                            document.getElementById("numCr").setAttribute('style','visibility:visible');
+                            document.getElementById("inputCr").required = true;
+                        }
+                        else if(valor == "Estagiario"){
+                            document.getElementById("numMat").setAttribute('style','visibility:visible');
+                            document.getElementById("inputMatricula").required = true;
+                            document.getElementById("ramal").style.display = "none";
+                            document.getElementById("email").setAttribute('style','visibility:visible');
+                            document.getElementById("inputEmail").required = true;
+                            document.getElementById("numTel").setAttribute('style','visibility:visible');
+                            document.getElementById("telefone").required = true;
+                            document.getElementById("numCr").setAttribute('style','visibility:visible');
+                            document.getElementById("inputCr").required = true;
+                        }
+                        else if(valor == "Cliente"){
+                            document.getElementById("numMat").style.display = "none";
+                            document.getElementById("ramal").style.display = "none";
+                            document.getElementById("email").style.display = "none";
+                            document.getElementById("numTel").setAttribute('style','visibility:visible');
+                            document.getElementById("telefone").required = true;
+                            document.getElementById("numCr").style.display = "none";
+                        }
+                        else if(valor == "PrestadorDeServico"){
+                            document.getElementById("numMat").style.display = "none";
+                            document.getElementById("ramal").style.display = "none";
+                            document.getElementById("email").style.display = "none";
+                            document.getElementById("numTel").setAttribute('style','visibility:visible');
+                            document.getElementById("telefone").required = true;
+                            document.getElementById("numCr").style.display = "none";
+                        }
+                        else if(valor == "Visitante"){
+                            document.getElementById("numMat").style.display = "none";
+                            document.getElementById("ramal").style.display = "none";
+                            document.getElementById("email").style.display = "none";
+                            document.getElementById("numTel").setAttribute('style','visibility:visible');
+                            document.getElementById("telefone").required = true;
+                            document.getElementById("numCr").style.display = "none";
+                        }
+                        else if(valor == "JovemAprendiz"){
+                            document.getElementById("numMat").style.display = "none";
+                            document.getElementById("ramal").style.display = "none";
+                            document.getElementById("email").style.display = "none";
+                            document.getElementById("numTel").setAttribute('style','visibility:visible');
+                            document.getElementById("telefone").required = true;
+                            document.getElementById("numCr").style.display = "none";
+                        }
+                        else {
+                            document.getElementById("numMat").style.display = "none";
+                            document.getElementById("ramal").style.display = "none";
+                            document.getElementById("email").style.display = "none";
+                            document.getElementById("numTel").style.display = "none";
+                            document.getElementById("numCr").style.display = "none";
+                        }
+                         
+                 }
         </script>
 
         <!-- Font Awesome JS -->
@@ -36,7 +117,7 @@
         <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js" integrity="sha384-6OIrr52G08NpOFSZdxxz1xdNSndlD4vdcf/q2myIUVO0VsqaGHJsB0RaBE01VTOY" crossorigin="anonymous"></script>
 
     </head>
-    <body>
+    <body id='formulario'>
         <div id="content">
             <div class="card card-outline-secondary">
                 <div class="card-header">
@@ -48,11 +129,14 @@
                         <div class="form-group row">
                             <label for="inputTipo_user" class="col-lg-3 col-form-label form-control-label">Tipo de Usuario</label>
                             <div class="col-lg-9">
-                                <select th:field="*{tipo_user}" class="form-control" required="required">        
+                                <select th:field="*{tipo_user}" class="form-control" required="required" id="tipoUser" onchange="validarForm(this.value)">        
                                     <option value="" selected="selected">Selecione...</option>
+                                    <option value="Cliente">Cliente</option>
                                     <option value="Associado">Associado</option>
                                     <option value="PrestadorDeServico">Prestador de Serviço</option>
-                                    <option value="Outros" >Outros</option>
+                                    <option value="Visitante">Visitante</option>
+                                    <option value="Estagiario">Estagiário</option>
+                                    <option value="JovemAprendiz">Jovem Aprendiz</option>
                                 </select>
                             </div>
                         </div>
@@ -64,66 +148,63 @@
                             </div>
                         </div>
 
+
                         <div class="form-group row">
-                            <label for="inputVenc_cnh" class="col-lg-3 col-form-label form-control-label">Vencimento Cnh</label>
-                            <div class="col-lg-9">
-                                <input type="date" class="form-control" id="inputCnh" th:field="*{venc_cnh}" required="required" />
+                            <label for="inputPergunta" class="col-lg-3 col-form-label form-control-label">Possui CNH?</label>
+                            <div class="col-lg-4">
+                                <input type="radio" name="optionsRadiosInline" id="optionsRadiosInline1" value="Option1" class="col-lg-1" required="required">SIM
+                                <input type="radio" name="optionsRadiosInline" id="optionsRadiosInline2" value="Option2" class="col-lg-1" required="required" checked>NAO
                             </div>
                         </div>
 
-                        <div class="form-group row">
-                            <label for="inputCateg_cnh" class="col-lg-3 col-form-label form-control-label">Categoria Cnh</label>
+
+                        <div class="form-group row" id="numVenc" style="display:none">
+                            <label for="inputVenc_cnh" class="col-lg-3 col-form-label form-control-label" >Vencimento Cnh</label>
                             <div class="col-lg-9">
-                                <select th:field="*{categ_cnh}" class="form-control" required="required"> 
-                                    <option value="" selected="selected">Selecione...</option>
-                                    <option value="A">A</option>
-                                    <option value="B">B</option>
-                                    <option value="C">C</option>
-                                    <option value="D">D</option>
-                                </select>
+                                <input type="date" class="form-control" id="inputVencimento" th:field="*{venc_cnh}"/>
                             </div>
                         </div>
 
-                        <div class="form-group row">
+                        <div class="form-group row" id="numCnh" style="display:none">
                             <label for="inputCnh" class="col-lg-3 col-form-label form-control-label">Cnh</label>
                             <div class="col-lg-9">
-                                <input type="text" class="form-control" id="inputCnh" th:field="*{cnh}" maxlength="11" pattern="\d{11}" placeholder="Ex.: 12345678910" title="Numero da CNH" required="required"/>
+                                <input type="text" class="form-control" id="inputCnh" th:field="*{cnh}" maxlength="11" pattern="\d{11}" placeholder="Ex.: 12345678910" title="Numero da CNH"/>
                             </div>
                         </div>
 
-                        <div class="form-group row">
+                        <div class="form-group row" id="numMat" style="display:none">
                             <label for="inputMatricula" class="col-lg-3 col-form-label form-control-label">Matricula</label>
                             <div class="col-lg-9">
-                                <input type="text" class="form-control" id="inputMatricula" th:field="*{matricula}" title="Numero da Matricula" />
+                                <input type="number" class="form-control" id="inputMatricula" th:field="*{matricula}" title="Numero da Matricula" />
                             </div>
                         </div>
 
-                        <div class="form-group row">
+                        <div class="form-group row" id="numTel" style="display:none">
                             <label for="inputTel" class="col-lg-3 col-form-label form-control-label">Telefone para contato</label>
                             <div class="col-lg-9">
-                                <input type="text" name="telefone" class="form-control" id="telefone" placeholder="Ex.: (00)0 0000-0000" th:field="*{tel}" maxlength="11" required="required" />
+                                <input type="text" name="telefone" class="form-control" id="telefone" placeholder="Ex.: (00)0 0000-0000" th:field="*{tel}" maxlength="11" />
 
                             </div>
                         </div>
 
-                        <div class="form-group row">
+                        <div class="form-group row" id="email" style="display:none">
                             <label for="inputEmail" class="col-lg-3 col-form-label form-control-label">Email</label>
                             <div class="col-lg-9">
                                 <input type="email" class="form-control" id="inputEmail" th:field="*{email}" placeholder="Ex.: nome@algartelecom.com.br"/>
                             </div>
                         </div>
 
-                        <div class="form-group row">
+                        <div class="form-group row" id="ramal" style="display:none">
                             <label for="inputRamal" class="col-lg-3 col-form-label form-control-label">Ramal</label>
                             <div class="col-lg-9">
                                 <input type="number" class="form-control" id="inputRamal" th:field="*{ramal}" />
                             </div>
                         </div>
 
-                        <div class="form-group row">
+                        <div class="form-group row" id="numCr" style="display:none">
                             <label for="inputCr" class="col-lg-3 col-form-label form-control-label" >Cr</label>
                             <div class="col-lg-9">
-                                <select th:field="${condutor.cr}" id="inputCr" class="form-control" required="required">
+                                <select th:field="${condutor.cr}" id="inputCr" class="form-control">
                                     <option value="" selected="selected">Selecione...</option>
                                     <option th:each="cr : ${crs}" th:value="${cr.id}"
                                             th:text="${cr.nome}"></option>
@@ -135,11 +216,11 @@
                         <div class="form-group row">
                             <label class="col-lg-3 col-form-label form-control-label"></label>
                             <div class="col-lg-9">
-                                <button type="submit" class="btn btn-outline-success" >
+                                <button type="submit" class="btn btn-success" >
                                     <i class="fas fa-plus-square"></i>
                                     Salvar
                                 </button> 
-                                <a th:href="@{/condutor}" class="btn btn-outline-danger">
+                                <a id="cancelar" th:href="@{/condutor}" class="btn btn-danger">
                                     <i class="fas fa-minus-square"></i>
                                     Cancelar
                                 </a>

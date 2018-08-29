@@ -29,6 +29,15 @@
         <!-- Font Awesome JS -->
         <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js" integrity="sha384-tzzSw1/Vo+0N5UhStP3bvwWPq+uvzCMfrN1fEFe+xBmv1C/AtVX5K0uZtmcHitFZ" crossorigin="anonymous"></script>
         <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js" integrity="sha384-6OIrr52G08NpOFSZdxxz1xdNSndlD4vdcf/q2myIUVO0VsqaGHJsB0RaBE01VTOY" crossorigin="anonymous"></script>
+    
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $('#sidebarCollapse').on('click', function () {
+                    $('#sidebar').toggleClass('active');
+                });
+            });
+        </script>
+        
     </head>
     <body>
         <div class="wrapper">
@@ -72,7 +81,7 @@
                 </ul>
             </nav>
 
-            <!-- Page Content  -->
+                        <!------------- Page Content  ------------------>
             <div id="content">
 
                 <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -95,10 +104,7 @@
                                 <th>Tipo Usuario</th>
                                 <th>Nome</th>
                                 <th>Cnh</th>
-                                <th>Categ.</th>
                                 <th>Contato</th>
-                                <th>Email</th>
-                                <th>Cr</th>
                                 <th>Veiculos</th>
                                 <th>Alteração</th>
                                 <th>Excluir</th>
@@ -109,20 +115,20 @@
                                 <td th:text="${condutor.tipo_user}"></td>
                                 <td th:text="${condutor.nome}"></td>
                                 <td th:text="${condutor.cnh}"></td>
-                                <td th:text="${condutor.categ_cnh}"></td>
                                 <td th:text="${condutor.tel}"></td>
-                                <td th:text="${condutor.email}"></td>
-                                <td th:text="${condutor.cr.nome}"></td>
-                                <td><a th:href="${(#mvc.url('CC#listaVeiculos').arg(0, condutor.cnh)).build()}">
+                                <td><a th:href="${(#mvc.url('CC#listaVeiculos').arg(0, condutor.id)).build()}">
                                         <i class="fas fa-stream"></i>
                                         View
-                                    </a></td>
-                                <td><a th:href="@{/condutor/editar(cnh=${condutor.cnh})}">
+                                    </a>
+                                </td>
+                                
+                                <td><a th:href="@{/condutor/editar(id=${condutor.id})}">
                                         <i class="fas fa-edit"></i>
                                         Editar
-                                    </a></td>
-                                <td>
-                                    <a th:href="@{/condutor/excluir(cnh=${condutor.cnh})}">
+                                    </a>
+                                </td>
+                                
+                                <td><a th:href="@{/condutor/excluir(id=${condutor.id})}">
                                         <i class="fas fa-trash"></i>
                                         Excluir
                                     </a>
@@ -142,12 +148,6 @@
                 
                 <!-- Bootstrap JS -->
                 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
-                <script type="text/javascript">
-                    $(document).ready(function () {
-                        $('#sidebarCollapse').on('click', function () {
-                            $('#sidebar').toggleClass('active');
-                        });
-                    });
-                </script>
+                
 </body>
 </html>
